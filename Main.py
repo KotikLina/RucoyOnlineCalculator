@@ -1,6 +1,8 @@
 from disnake.ext import commands
 import disnake
-import BattleModel
+
+import TrainModel
+
 
 command_sync_flags = commands.CommandSyncFlags.default()
 command_sync_flags.sync_commands_debug = True
@@ -23,8 +25,8 @@ class Dropdown(disnake.ui.StringSelect):
         self.battle = battle
         options = []
 
-        for mob in BattleModel.high_hp_mobs:
-            if battle.ctx.mob["defense"] == BattleModel.low_hp_mobs[-1]["defense"]:
+        for mob in TrainModel.high_hp_mobs:
+            if battle.ctx.mob["defense"] == TrainModel.low_hp_mobs[-1]["defense"]:
                 options.append(disnake.SelectOption(label=mob["name"], emoji=mob["emoji"], value=mob["defense"]))
             elif mob["defense"] <= battle.ctx.mob["defense"]:
                 options.append(disnake.SelectOption(label=mob["name"], emoji=mob["emoji"], value=mob["defense"]))
@@ -41,7 +43,7 @@ class Dropdown(disnake.ui.StringSelect):
         await inter.response.edit_message(embed=embed)
 
 
-class DropdownView(disnake.ui.View):
+class View(disnake.ui.View):
     def __init__(self, battle):
         super().__init__()
         if battle.end_game:
@@ -53,10 +55,10 @@ class DropdownView(disnake.ui.View):
 
 @bot.slash_command(name="train", description="online train")
 async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon_atk: int = 5):
-    battle = BattleModel.BattleModel(lvl, stat, buffs, weapon_atk)
+    battle = TrainModel.BattleModel(lvl, stat, buffs, weapon_atk)
 
     embed = await battle.view(False)
-    view = DropdownView(battle)
+    view = View(battle)
 
     await inter.response.send_message(embed=embed, view=view)
 

@@ -1,8 +1,9 @@
-import disnake
 import json
+import disnake
 import itertools
 from abc import ABC, abstractmethod
 from typing import Final, AsyncGenerator
+
 
 with open("Mobs_info.json", "r") as file:
     data = json.load(file)
@@ -20,7 +21,6 @@ for mob in mobs_info:
 
 class Context:
     DEFAULT_MOB: Final[dict] = {"defense": 1000}
-
     mob: dict
 
     def __init__(self, mob: dict | None = None) -> None:
@@ -58,6 +58,7 @@ class AbstractPerson(ABC):
         self.stat = stat
         self.buffs = buffs
         self.weapon_atk = weapon_atk
+
         self.ctx = ctx
 
 
@@ -69,12 +70,11 @@ class Person(AbstractPerson):
     # raw damage
     @property
     def min_raw_damage(self) -> float:
-        # real_stat * (weapon_atk / 20)
-        return (self.real_stat * self.weapon_atk) / 20 + self.lvl / 4  # или * 0.25
+        return (self.real_stat * self.weapon_atk) / 20 + self.lvl / 4
 
     @property
     def max_raw_damage(self) -> float:
-        return (self.real_stat * self.weapon_atk) / 10 + self.lvl / 4  # или * 0.25
+        return (self.real_stat * self.weapon_atk) / 10 + self.lvl / 4
 
     @property
     def max_raw_crit_damage(self) -> float:
@@ -93,7 +93,7 @@ class Person(AbstractPerson):
     def max_crit_damage(self) -> float:
         return max(self.max_raw_crit_damage - self.ctx.mob["defense"], 0)
 
-    # accuracy and mob
+    # accuracy and average damage
     @property
     def normal_accuracy(self) -> float:
         return max((self.max_damage / (self.max_raw_damage - self.min_raw_damage)), 0)
@@ -110,17 +110,18 @@ class Person(AbstractPerson):
     def average_damage(self) -> float:
         return self.accuracy * (0.99 * ((self.max_damage + self.min_damage) / 2)) + 0.01 * ((self.max_crit_damage + self.max_damage) / 2)
 
+    # copy
     def copy(self, ctx):
         return Person(self.lvl, self.stat, self.buffs, self.weapon_atk, ctx)
 
 
 class AbstractBattleModel(ABC):
-    tickrate: int
-    time: int
-
     frontier_group: dict | None
     trained_person: Person | None
     trained_stat: int | None
+
+    tickrate: int
+    time: int
 
     ctx: Context
 
@@ -129,7 +130,8 @@ class AbstractBattleModel(ABC):
         ...
 
     @abstractmethod
-    def view(self, button) -> disnake.Embed: ...
+    def view(self, button) -> disnake.Embed:
+        ...
 
 
 class BattleModel(AbstractBattleModel):
@@ -139,6 +141,7 @@ class BattleModel(AbstractBattleModel):
     def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int) -> None:
         self.ctx = Context()
         self.person = Person(lvl, stat, buffs, weapon_atk, ctx=self.ctx)
+
         self.trained_person = None
         self.trained_stat = None
         self.end_game = None
@@ -241,7 +244,6 @@ class BattleModel(AbstractBattleModel):
             description.append("\n".join(ttks))
             description.append(f"Max. Damage: {int(self.person.max_damage)} {mini_slime_emoji} Tickrate: {self.tickrate} / 3600")
         else:
-            description.append("")
             description.append(f"Training is impossible. Please contact @kotiklinok with this error")
 
         # button
