@@ -193,6 +193,7 @@ class BattleModel(AbstractBattleModel):
         ctx.mob = self.frontier_group[0]
         self.trained_person = self.person.copy(ctx)
         self.trained_stat = 0
+
         while self.trained_person.accuracy < self.REQUIRED_ACCURACY:
             self.trained_person.stat += 1
             self.trained_stat += 1
@@ -205,9 +206,9 @@ class BattleModel(AbstractBattleModel):
             return
 
         key = lambda x: (x["defense"])
-        boobs = itertools.groupby(sorted(mobs_info, key=key, reverse=True), key=key)
+        iterator = itertools.groupby(sorted(mobs_info, key=key, reverse=True), key=key)
 
-        for defense, group in boobs:
+        for defense, group in iterator:
             group = tuple(group)
 
             if defense != int(button):
