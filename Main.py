@@ -2,6 +2,7 @@ from disnake.ext import commands
 import disnake
 
 import TrainModel
+import PowerTrainModel
 
 
 command_sync_flags = commands.CommandSyncFlags.default()
@@ -62,5 +63,9 @@ async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon
 
     await inter.response.send_message(embed=embed, view=view)
 
+
+@bot.slash_command(name="ptrain", description="online power train")
+async def ptrain_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon_atk: int = 5, tick: int = 4):
+    pass
 
 bot.run('')
