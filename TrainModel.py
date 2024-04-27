@@ -1,128 +1,21 @@
 import disnake
-import json
 import itertools
+
 from abc import ABC, abstractmethod
 from typing import Final, AsyncGenerator
 
-with open("Mobs_info.json", "r") as file:
-    data = json.load(file)
-
-mobs_info: list[dict] = data["mobs"]
-low_hp_mobs = []
-high_hp_mobs = []
-
-for mob in mobs_info:
-    if mob["health"] < 10000:
-        low_hp_mobs.append(mob)
-    else:
-        high_hp_mobs.append(mob)
+import Person_and_Mob
 
 
-class Context:
-    DEFAULT_MOB: Final[dict] = {"defense": 1000}
-
-    mob: dict
-
-    def __init__(self, mob: dict | None = None) -> None:
-        if mob is None:
-            self.mob = self.DEFAULT_MOB
-        else:
-            self.mob = mob
-
-
-class AbstractPerson(ABC):
-    lvl: int
-    stat: int
-    buffs: int
-    real_stat: int
-    weapon_atk: int
-
-    min_raw_damage: float
-    max_raw_damage: float
-    max_raw_crit_damage: float
-
-    min_damage: float
-    max_damage: float
-    max_crit_damage: float
-
-    normal_accuracy: int
-    crit_accuracy: int
-    accuracy: float
-
-    average_damage: int
-
-    ctx: Context
-
-    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int, ctx: Context) -> None:
-        self.lvl = lvl
-        self.stat = stat
-        self.buffs = buffs
-        self.weapon_atk = weapon_atk
-        self.ctx = ctx
-
-
-class Person(AbstractPerson):
-    @property
-    def real_stat(self) -> int:
-        return self.stat + self.buffs
-
-    # raw damage
-    @property
-    def min_raw_damage(self) -> float:
-        # real_stat * (weapon_atk / 20)
-        return (self.real_stat * self.weapon_atk) / 20 + self.lvl / 4  # или * 0.25
-
-    @property
-    def max_raw_damage(self) -> float:
-        return (self.real_stat * self.weapon_atk) / 10 + self.lvl / 4  # или * 0.25
-
-    @property
-    def max_raw_crit_damage(self) -> float:
-        return self.max_raw_damage * 1.05
-
-    # damage
-    @property
-    def min_damage(self) -> float:
-        return max(self.min_raw_damage - self.ctx.mob["defense"], 0)
-
-    @property
-    def max_damage(self) -> float:
-        return max(self.max_raw_damage - self.ctx.mob["defense"], 0)
-
-    @property
-    def max_crit_damage(self) -> float:
-        return max(self.max_raw_crit_damage - self.ctx.mob["defense"], 0)
-
-    # accuracy and mob
-    @property
-    def normal_accuracy(self) -> float:
-        return max((self.max_damage / (self.max_raw_damage - self.min_raw_damage)), 0)
-
-    @property
-    def crit_accuracy(self) -> float:
-        return min(1.00, (self.max_crit_damage / (self.max_raw_crit_damage - self.max_raw_damage)))
-
-    @property
-    def accuracy(self) -> float:
-        return (self.normal_accuracy * 0.99) + (self.crit_accuracy * 0.01)
-
-    @property
-    def average_damage(self) -> float:
-        return self.accuracy * (0.99 * ((self.max_damage + self.min_damage) / 2)) + 0.01 * ((self.max_crit_damage + self.max_damage) / 2)
-
-    def copy(self, ctx):
-        return Person(self.lvl, self.stat, self.buffs, self.weapon_atk, ctx)
-
-
-class AbstractBattleModel(ABC):
+class AbstractTrainModel(ABC):
     tickrate: int
     time: int
 
     frontier_group: dict | None
-    trained_person: Person | None
+    trained_person: Person_and_Mob.Person | None
     trained_stat: int | None
 
-    ctx: Context
+    ctx: Person_and_Mob.Context
 
     @abstractmethod
     def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int) -> None:
@@ -132,13 +25,14 @@ class AbstractBattleModel(ABC):
     def view(self, button) -> disnake.Embed: ...
 
 
-class BattleModel(AbstractBattleModel):
+class TrainModel(AbstractTrainModel):
     REQUIRED_ACCURACY: Final[float] = 0.1749
     TRAIN_TICKRATE: Final[int] = 3600
 
     def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int) -> None:
-        self.ctx = Context()
-        self.person = Person(lvl, stat, buffs, weapon_atk, ctx=self.ctx)
+        self.ctx = Person_and_Mob.Context()
+        self.person = Person_and_Mob.Person(lvl, stat, buffs, weapon_atk, ctx=self.ctx)
+
         self.trained_person = None
         self.trained_stat = None
         self.end_game = None
@@ -150,14 +44,14 @@ class BattleModel(AbstractBattleModel):
 
     @property
     def time(self) -> float:
-        return self.ctx.mob['health'] / self.person.average_damage
+        return self.ctx.mob["health"] / self.person.average_damage
 
     # Основной процесс
     async def process_mobs(self) -> AsyncGenerator[dict, None]:
         self.frontier_group = None
 
         key = lambda x: (x["defense"])
-        iterator = itertools.groupby(sorted(low_hp_mobs, key=key, reverse=True), key=key)
+        iterator = itertools.groupby(sorted(Person_and_Mob.low_hp_mobs, key=key, reverse=True), key=key)
 
         prev = None
         for _, group in iterator:
@@ -179,30 +73,13 @@ class BattleModel(AbstractBattleModel):
             else:
                 break
 
-    # Процесс со следующим мобом
-    async def process_next_mobs(self) -> AsyncGenerator[dict, None]:
-        if self.frontier_group is None:
-            self.trained_person = None
-            self.trained_stat = 0
-            return
-
-        ctx = Context()
-        ctx.mob = self.frontier_group[0]
-        self.trained_person = self.person.copy(ctx)
-        self.trained_stat = 0
-        while self.trained_person.accuracy < self.REQUIRED_ACCURACY:
-            self.trained_person.stat += 1
-            self.trained_stat += 1
-        for ctx.mob in self.frontier_group:
-            yield ctx.mob
-
     # Процесс по нажатию кнопки
     async def process_button(self, button):
         if button is False:
             return
 
         key = lambda x: (x["defense"])
-        boobs = itertools.groupby(sorted(mobs_info, key=key, reverse=True), key=key)
+        boobs = itertools.groupby(sorted(Person_and_Mob.mobs_info, key=key, reverse=True), key=key)
 
         for defense, group in boobs:
             group = tuple(group)
@@ -216,6 +93,23 @@ class BattleModel(AbstractBattleModel):
                     yield mob
                 else:
                     break
+
+    # Процесс со следующим мобом
+    async def process_next_mobs(self) -> AsyncGenerator[dict, None]:
+        if self.frontier_group is None:
+            self.trained_person = None
+            self.trained_stat = 0
+            return
+
+        ctx = Person_and_Mob.Context()
+        ctx.mob = self.frontier_group[0]
+        self.trained_person = self.person.copy(ctx)
+        self.trained_stat = 0
+        while self.trained_person.accuracy < self.REQUIRED_ACCURACY:
+            self.trained_person.stat += 1
+            self.trained_stat += 1
+        for ctx.mob in self.frontier_group:
+            yield ctx.mob
 
     async def view(self, button: int | bool) -> disnake.Embed:
         mini_slime_emoji = "<:mini_slime:1194708281319510017>"
