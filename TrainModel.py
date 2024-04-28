@@ -158,12 +158,11 @@ class BattleModel(AbstractBattleModel):
             if defense != int(button):
                 continue
 
-            for mob in group:
-                self.ctx.mob = mob
-                if self.person.max_damage != 0:
+            self.ctx.mob = group[0]
+            if self.person.max_damage != 0:
+                for mob in group:
+                    self.ctx.mob = mob
                     yield mob
-                else:
-                    break
 
     async def view(self, button: int | bool) -> disnake.Embed:
         mini_slime_emoji = "<:mini_slime:1194708281319510017>"
@@ -172,10 +171,10 @@ class BattleModel(AbstractBattleModel):
         names = list()
         ttks = list()
 
-        names_next_mob = list()
-
         names_mob_button = list()
         ttks_mob_button = list()
+
+        names_next_mob = list()
 
         # mob
         async for mob in self.process_mobs():
