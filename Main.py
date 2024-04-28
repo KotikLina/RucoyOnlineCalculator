@@ -3,6 +3,7 @@ import disnake
 
 import TrainModel
 import PowerTrainModel
+import temporary_common_storage
 
 
 command_sync_flags = commands.CommandSyncFlags.default()
@@ -26,8 +27,8 @@ class Dropdown(disnake.ui.StringSelect):
         self.battle = battle
         options = []
 
-        for mob in TrainModel.high_hp_mobs:
-            if battle.ctx.mob["defense"] == TrainModel.low_hp_mobs[-1]["defense"]:
+        for mob in temporary_common_storage.high_hp_mobs:
+            if battle.ctx.mob["defense"] == temporary_common_storage.low_hp_mobs[-1]["defense"]:
                 options.append(disnake.SelectOption(label=mob["name"], emoji=mob["emoji"], value=mob["defense"]))
             elif mob["defense"] <= battle.ctx.mob["defense"]:
                 options.append(disnake.SelectOption(label=mob["name"], emoji=mob["emoji"], value=mob["defense"]))
