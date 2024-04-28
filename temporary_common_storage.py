@@ -1,5 +1,8 @@
 import json
 
+from abc import ABC
+from typing import Final
+
 
 with open("Mobs_info.json", "r") as file:
     data = json.load(file)
