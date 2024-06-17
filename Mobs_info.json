@@ -4,235 +4,274 @@
             "name": "Rat Lv.1",
             "defense": 4,
             "health": 25,
-            "emoji": "<:Rat_lvl_1:1194986686170538033>"
+            "emoji": "<:Rat_lvl_1:1194986686170538033>",
+            "class_type": "melee"
         },
         {
             "name": "Rat Lv.3",
             "defense": 7,
             "health": 35,
-            "emoji": "<:Rat_lvl_3:1194987613493407794>"
+            "emoji": "<:Rat_lvl_3:1194987613493407794>",
+            "class_type": "melee"
         },
         {
             "name": "Crow Lv.6",
             "defense": 13,
             "health": 40,
-            "emoji": "<:Crow_lvl_6:1195057268564172852>"
+            "emoji": "<:Crow_lvl_6:1195057268564172852>",
+            "class_type": "melee"
         },
         {
             "name": "Wolf Lv.9",
             "defense": 17,
             "health": 50,
-            "emoji": "<:Wolf_lvl_9:1195068595852554301>"
+            "emoji": "<:Wolf_lvl_9:1195068595852554301>",
+            "class_type": "melee"
         },
         {
             "name": "Scorpion Lv.12",
             "defense": 18,
             "health": 50,
-            "emoji": "<:Scorpion_lvl_12:1195351469025673326>"
+            "emoji": "<:Scorpion_lvl_12:1195351469025673326>",
+            "class_type": "melee"
         },
         {
             "name": "Cobra Lv.13",
             "defense": 18,
             "health": 50,
-            "emoji": "<:Cobra_lvl_13:1195358005349335101>"
+            "emoji": "<:Cobra_lvl_13:1195358005349335101>",
+            "class_type": "melee"
         },
         {
             "name": "Worm Lv.14",
             "defense": 19,
             "health": 55,
-            "emoji": "<:Worm_lvl_14:1195417007181529098>"
+            "emoji": "<:Worm_lvl_14:1195417007181529098>",
+            "class_type": "melee"
         },
         {
             "name": "Goblin Lv.15",
             "defense": 21,
             "health": 60,
-            "emoji": "<:Goblin_lvl_15:1195421326807150603>"
+            "emoji": "<:Goblin_lvl_15:1195421326807150603>",
+            "class_type": "melee"
         },
         {
             "name": "Mummy Lv.25",
             "defense": 36,
             "health": 80,
-            "emoji": "<:Mummy_lvl_25:1195428905633448086>"
+            "emoji": "<:Mummy_lvl_25:1195428905633448086>",
+            "class_type": "melee"
         },
         {
             "name": "Pharaoh Lv.35",
             "defense": 51,
             "health": 100,
-            "emoji": "<:Pharaoh_lvl_35:1196436466344136744>"
+            "emoji": "<:Pharaoh_lvl_35:1196436466344136744>",
+            "class_type": "melee"
         },
         {
             "name": "Assassin Lv.45",
             "defense": 71,
             "health": 120,
-            "emoji": "<:Assassin_lvl_45:1196442467147460700>"
+            "emoji": "<:Assassin_lvl_45:1196442467147460700>",
+            "class_type": "melee"
         },
         {
             "name": "Assassin Lv.50",
             "defense": 81,
             "health": 140,
-            "emoji": "<:Assassin_lvl_50:1196460427173961829>"
+            "emoji": "<:Assassin_lvl_50:1196460427173961829>",
+            "class_type": "melee"
         },
         {
             "name": "Assassin Ninja Lv.55",
             "defense": 91,
             "health": 160,
-            "emoji": "<:Assassin_Ninja_lvl_55:1196449546142752839>"
+            "emoji": "<:Assassin_Ninja_lvl_55:1196449546142752839>",
+            "class_type": "melee"
         },
         {
             "name": "Skeleton Archer Lv.80",
             "defense": 101,
             "health": 300,
-            "emoji": "<:Skeleton_Archer_lvl_80:1196786992185344060>"
+            "emoji": "<:Skeleton_Archer_lvl_80:1196786992185344060>",
+            "class_type": "distance"
         },
         {
             "name": "Zombie Lv.65",
             "defense": 106,
             "health": 200,
-            "emoji": "<:Zombie_lvl_65:1196805921309982753>"
+            "emoji": "<:Zombie_lvl_65:1196805921309982753>",
+            "class_type": "melee"
         },
         {
             "name": "Skeleton Lv.75",
             "defense": 121,
             "health": 300,
-            "emoji": "<:Skeleton_lvl_75:1196501473996054650>"
+            "emoji": "<:Skeleton_lvl_75:1196501473996054650>",
+            "class_type": "melee"
         },
         {
             "name": "Skeleton Warrior Lv.90",
             "defense": 146,
             "health": 375,
-            "emoji": "<:Skeleton_Warrior_lvl_90:1196793483210526771>"
+            "emoji": "<:Skeleton_Warrior_lvl_90:1196793483210526771>",
+            "class_type": "melee"
         },
         {
             "name": "Vampire Lv.100",
             "defense": 171,
             "health": 450,
-            "emoji": "<:Vampire_lvl_100:1196836576605503550>"
+            "emoji": "<:Vampire_lvl_100:1196836576605503550>",
+            "class_type": "melee"
         },
         {
             "name": "Vampire Lv.110",
             "defense": 186,
             "health": 530,
-            "emoji": "<:Vampire_lvl_110:1196837177271783434>"
+            "emoji": "<:Vampire_lvl_110:1196837177271783434>",
+            "class_type": "melee"
         },
         {
             "name": "Drow Ranger Lv.125",
             "defense": 191,
             "health": 600,
-            "emoji": "<:Drow_Ranger_lvl_125:1196842424526458960>"
+            "emoji": "<:Drow_Ranger_lvl_125:1196842424526458960>",
+            "class_type": "distance"
         },
         {
             "name": "Drow Mage Lv. 130",
             "defense": 191,
             "health": 600,
-            "emoji": "<:Drow_Mage_lvl_130:1196847853709045821>"
+            "emoji": "<:Drow_Mage_lvl_130:1196847853709045821>",
+            "class_type": "magic"
         },
         {
             "name": "Drow Assassin Lv.120",
             "defense": 221,
             "health": 620,
-            "emoji": "<:Drow_Assassin_lvl_120:1196852128589815949>"
+            "emoji": "<:Drow_Assassin_lvl_120:1196852128589815949>",
+            "class_type": "melee"
         },
         {
             "name": "Drow Sorceress Lv.140",
             "defense": 221,
             "health": 600,
-            "emoji": "<:Drow_Sorceress_lvl_140:1196857001611886672>"
+            "emoji": "<:Drow_Sorceress_lvl_140:1196857001611886672>",
+            "class_type": "magic"
         },
         {
             "name": "Drow Fighter Lv.135",
             "defense": 246,
             "health": 680,
-            "emoji": "<:Drow_Fighter_lvl_135:1196878104212275221>"
+            "emoji": "<:Drow_Fighter_lvl_135:1196878104212275221>",
+            "class_type": "melee"
         },
         {
             "name": "Lizard Archer Lv.160",
             "defense": 271,
             "health": 650,
-            "emoji": "<:Lizard_Archer_lvl_160:1201502580535214080>"
+            "emoji": "<:Lizard_Archer_lvl_160:1201502580535214080>",
+            "class_type": "distance"
         },
         {
             "name": "Lizard Shaman Lv.170",
             "defense": 276,
             "health": 600,
-            "emoji": "<:Lizard_Shaman_lvl_170:1201502769882857502>"
+            "emoji": "<:Lizard_Shaman_lvl_170:1201502769882857502>",
+            "class_type": "magic"
         },
         {
             "name": "Lizard Warrior Lv.150",
             "defense": 301,
             "health": 680,
-            "emoji": "<:Lizard_Warrior_lvl_150:1202020825985712210>"
+            "emoji": "<:Lizard_Warrior_lvl_150:1202020825985712210>",
+            "class_type": "melee"
         },
         {
             "name": "Djinn Lv.150",
             "defense": 301,
             "health": 640,
-            "emoji": "<:Djinn_lvl_150:1201589188626223154>"
+            "emoji": "<:Djinn_lvl_150:1201589188626223154>",
+            "class_type": "melee"
         },
         {
             "name": "Lizard High Shaman Lv.190",
             "defense": 326,
             "health": 740,
-            "emoji": "<:Lizard_High_Shaman_lvl_190:1201720398077493278>"
+            "emoji": "<:Lizard_High_Shaman_lvl_190:1201720398077493278>",
+            "class_type": "magic"
         },
         {
             "name": "Gargoyle Lv.190",
             "defense": 326,
             "health": 740,
-            "emoji": "<:Gargoyle_lvl_190:1201987826808266772>"
+            "emoji": "<:Gargoyle_lvl_190:1201987826808266772>",
+            "class_type": "melee"
         },
         {
             "name": "Lizard Captain lv.180",
             "defense": 361,
             "health": 815,
-            "emoji": "<:Lizard_Captain_lvl_180:1201584916136210543>"
+            "emoji": "<:Lizard_Captain_lvl_180:1201584916136210543>",
+            "class_type": "melee"
         },
         {
             "name": "Dragon Lv.250",
             "defense": 501,
             "health": 20000,
-            "emoji": "<:Dragon_lvl_250:1202023077211549770>"
+            "emoji": "<:Dragon_lvl_250:1202023077211549770>",
+            "class_type": "melee"
         },
         {
             "name": "Minotaur Lv.225",
             "defense": 511,
             "health": 4250,
-            "emoji": "<:Minotaur_lvl_225:1203261832370847765>"
+            "emoji": "<:Minotaur_lvl_225:1203261832370847765>",
+            "class_type": "melee"
         },
         {
             "name": "Minotaur Lv.250",
             "defense": 591,
             "health": 5000,
-            "emoji": "<:Minotaur_lvl_250:1203261851639619664>"
+            "emoji": "<:Minotaur_lvl_250:1203261851639619664>",
+            "class_type": "melee"
         },
         {
             "name": "Dragon Warden Lv.280",
             "defense": 626,
             "health": 30000,
-            "emoji": "<:Dragon_Warden_lvl_280:1202025248447549470>"
+            "emoji": "<:Dragon_Warden_lvl_280:1202025248447549470>",
+            "class_type": "melee"
         },
         {
             "name": "Ice Elemental Lv.300",
             "defense": 676,
             "health": 40000,
-            "emoji": "<:Ice_Elemental_lvl_300:1203275552920961074>"
+            "emoji": "<:Ice_Elemental_lvl_300:1203275552920961074>",
+            "class_type": "melee"
         },
         {
             "name": "Minotaur Lv.275",
             "defense": 681,
             "health": 5750,
-            "emoji": "<:Minotaur_lvl_275:1203269189465538591>"
+            "emoji": "<:Minotaur_lvl_275:1203269189465538591>",
+            "class_type": "melee"
         },
         {
             "name": "Ice Dragon Lv.320",
             "defense": 726,
             "health": 50000,
-            "emoji": "<:Ice_Dragon_lvl_320:1202023846899896320>"
+            "emoji": "<:Ice_Dragon_lvl_320:1202023846899896320>",
+            "class_type": "melee"
         },
         {
             "name": "Yeti Lv.350",
             "defense": 826,
             "health": 60000,
-            "emoji": "<:Yeti_lvl_350:1203277905543696384>"
+            "emoji": "<:Yeti_lvl_350:1203277905543696384>",
+            "class_type": "melee"
         }
     ]
 }

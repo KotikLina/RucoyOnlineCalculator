@@ -12,6 +12,9 @@ command_sync_flags.sync_commands_debug = True
 bot = commands.InteractionBot(intents=disnake.Intents.all())
 
 
+CLASS_TYPE = ["melee", "distance", "magic"]
+
+
 class Button(disnake.ui.Button):
     def __init__(self, battle):
         self.battle = battle
@@ -48,6 +51,7 @@ class Dropdown(disnake.ui.StringSelect):
 class View(disnake.ui.View):
     def __init__(self, battle):
         super().__init__()
+
         if battle.end_game:
             self.add_item(Dropdown(battle))
 
@@ -66,7 +70,19 @@ async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon
 
 
 @bot.slash_command(name="ptrain", description="online power train")
-async def ptrain_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon_atk: int = 5, tick: int = 4):
-    pass
+async def ptrain_slash_command(inter, lvl: int, stat: int, class_type: str, buffs: int = 0, weapon_atk: int = 5, tick: int = 4):
+    battle = PowerTrainModel.BattleModel(lvl, stat, buffs, weapon_atk, tick, class_type)
+
+    embed = await battle.view(False)
+    view = View(battle)
+
+    await inter.response.send_message(embed=embed, view=view)
+
+
+@ptrain_slash_command.autocomplete("class_type")
+async def class_type_autocomplete(inter: disnake.CommandInteraction, class_type: str):
+    string = class_type.lower()
+    return [lang for lang in CLASS_TYPE if string in lang.lower()]
+
 
 bot.run('')

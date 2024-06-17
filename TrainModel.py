@@ -208,8 +208,8 @@ class BattleModel(AbstractBattleModel):
             description.append("Additional training is not possible.")
 
         # next mob
-        async for Mob in self.process_next_mobs():
-            names_next_mob.append(f"{Mob['name']} {Mob['emoji']}")
+        async for mob in self.process_next_mobs():
+            names_next_mob.append(f"{mob['name']} {mob['emoji']}")
 
         if self.trained_person is not None:
             if self.trained_person.max_damage >= 1:
