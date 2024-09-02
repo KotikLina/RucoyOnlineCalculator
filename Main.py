@@ -62,7 +62,7 @@ class View(disnake.ui.View):
 
 @bot.slash_command(name="train", description="Online train")
 async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon_atk: int = 5):
-    battle = TrainModel.BattleModel(lvl, stat, buffs, weapon_atk)
+    battle = TrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk)
 
     embed = await battle.view(False)
     view = View(battle)
@@ -72,7 +72,7 @@ async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon
 
 @bot.slash_command(name="ptrain", description="Online power train")
 async def ptrain_slash_command(inter, lvl: int, stat: int, class_type: str, buffs: int = 0, weapon_atk: int = 5, tick: int = 4):
-    battle = PowerTrainModel.BattleModel(lvl, stat, buffs, weapon_atk, tick, class_type)
+    battle = PowerTrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, tick=tick, class_type=class_type)
 
     embed = await battle.view(False)
     view = View(battle)
@@ -88,7 +88,7 @@ async def class_type_autocomplete(inter: disnake.CommandInteraction, class_type:
 
 @bot.slash_command(name="lvl_info", description="exp lvl and skull")
 async def level_info_slash_command(inter, lvl: int):
-    indicators = IndicatorsModel.IndicatorsModel(lvl)
+    indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
 
     embed = indicators.view()
 
