@@ -61,7 +61,11 @@ class View(disnake.ui.View):
 
 
 @bot.slash_command(name="train", description="Online train")
-async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon_atk: int = 5):
+async def train_slash_command(inter: disnake.ApplicationCommandInteraction,
+                              lvl: commands.Range[int, 0, 1000],
+                              stat: commands.Range[int, 0, 1000],
+                              buffs: commands.Range[int, -100, 100] = 0,
+                              weapon_atk: commands.Range[int, 4, 100] = 5):
     battle = TrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk)
 
     embed = await battle.view(False)
@@ -71,7 +75,13 @@ async def train_slash_command(inter, lvl: int, stat: int, buffs: int = 0, weapon
 
 
 @bot.slash_command(name="ptrain", description="Online power train")
-async def ptrain_slash_command(inter, lvl: int, stat: int, class_type: str, buffs: int = 0, weapon_atk: int = 5, tick: int = 4):
+async def ptrain_slash_command(inter: disnake.ApplicationCommandInteraction,
+                               lvl: commands.Range[int, 0, 1000],
+                               stat: commands.Range[int, 0, 1000],
+                               class_type: str,
+                               buffs: commands.Range[int, -100, 100] = 0,
+                               weapon_atk: commands.Range[int, 4, 100] = 5,
+                               tick: commands.Range[int, 1, 5] = 4):
     battle = PowerTrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, tick=tick, class_type=class_type)
 
     embed = await battle.view(False)
@@ -87,7 +97,8 @@ async def class_type_autocomplete(inter: disnake.CommandInteraction, class_type:
 
 
 @bot.slash_command(name="lvl_info", description="exp lvl and skull")
-async def level_info_slash_command(inter, lvl: int):
+async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction,
+                                   lvl: commands.Range[int, 1, 1000]):
     indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
 
     embed = indicators.view()
