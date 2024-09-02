@@ -96,7 +96,7 @@ async def class_type_autocomplete(inter: disnake.CommandInteraction, class_type:
     return [lang for lang in CLASS_TYPE if string in lang.lower()]
 
 
-@bot.slash_command(name="lvl_info", description="exp lvl and skull")
+@bot.slash_command(name="lvl_info", description="Exp and skull")
 async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction,
                                    lvl: commands.Range[int, 1, 1000]):
     indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
@@ -106,4 +106,5 @@ async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction,
     await inter.response.send_message(embed=embed)
 
 
-bot.run('')
+if __name__ == "__main__":
+    bot.run("")

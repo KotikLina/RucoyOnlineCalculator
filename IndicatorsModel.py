@@ -37,7 +37,6 @@ def points(numbers: int) -> str:
     if numbers // 1000000:
         return f"{f'{numbers:,}'.replace(',', '.')}"
     else:
-        print("что-то тат не так...")
         return "ERROR"
 
 
@@ -143,28 +142,28 @@ class IndicatorsModel(AbstractIndicatorsModel):
 
         description.append("")
 
-        description.append(f"Золото, необходимое для получения {white_skull} черепа: `{self.coins_required_for_while_skull}` {money}")
-        description.append(f"Золото, что будет потеряно при смерти с {white_skull} черепом: `{self.coins_lost_by_white_skull}` {money}")
+        description.append(f"Gold needed to obtain a {white_skull} skull: `{self.coins_required_for_while_skull}` {money}")
+        description.append(f"Gold that will be lost on death with {white_skull} skull: `{self.coins_lost_by_white_skull}` {money}")
 
         description.append("")
 
-        description.append(f"Золото, необходимое для получения {yellow_skull} черепа: `{self.coins_required_for_yellow_skull}` {money}")
-        description.append(f"Золото, что будет потеряно при смерти с {yellow_skull} черепом: `{self.coins_lost_by_yellow_skull}` {money}")
+        description.append(f"Gold needed to obtain a {yellow_skull} skull: `{self.coins_required_for_yellow_skull}` {money}")
+        description.append(f"Gold that will be lost on death with {yellow_skull} skull: `{self.coins_lost_by_yellow_skull}` {money}")
 
         description.append("")
 
-        description.append(f"Золото, необходимое для получения {orange_skull} черепа: `{self.coins_required_for_orange_skull}` {money}")
-        description.append(f"Золото, что будет потеряно при смерти с {orange_skull} черепом: `{self.coins_lost_by_orange_skull}` {money}")
+        description.append(f"Gold needed to obtain a {orange_skull} skull: `{self.coins_required_for_orange_skull}` {money}")
+        description.append(f"Gold that will be lost on death with {orange_skull} skull: `{self.coins_lost_by_orange_skull}` {money}")
 
         description.append("")
 
-        description.append(f"Золото, необходимое для получения {red_skull} черепа: `{self.coins_required_for_red_skull}` {money}")
-        description.append(f"Золото, что будет потеряно при смерти с {red_skull} черепом: `{self.coins_lost_by_red_skull}` {money}")
+        description.append(f"Gold needed to obtain a {red_skull} skull: `{self.coins_required_for_red_skull}` {money}")
+        description.append(f"Gold that will be lost on death with {red_skull} skull: `{self.coins_lost_by_red_skull}` {money}")
 
         description.append("")
 
-        description.append(f"Золото, необходимое для получения {black_skull} черепа: `{self.coins_required_for_black_skull}` {money}")
-        description.append(f"Золото, что будет потеряно при смерти с {black_skull} черепом: `{self.coins_lost_by_black_skull}` {money}")
+        description.append(f"Gold needed to obtain a {black_skull} skull: `{self.coins_required_for_black_skull}` {money}")
+        description.append(f"Gold that will be lost on death with {black_skull} skull: `{self.coins_lost_by_black_skull}` {money}")
 
         set_author = "Indicators"
         return disnake.Embed(title=title, description="\n".join(description)).set_author(name=set_author)
