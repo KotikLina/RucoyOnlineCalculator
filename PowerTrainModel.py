@@ -62,7 +62,7 @@ class Person(temporary_common_storage.AbstractPerson):
 
     # copy
     def copy(self, ctx):
-        return Person(self.lvl, self.stat, self.buffs, self.weapon_atk, ctx, self.class_type)
+        return Person(lvl=self.lvl, stat=self.stat, buffs=self.buffs, weapon_atk=self.weapon_atk, ctx=ctx, class_type=self.class_type)
 
 
 class AbstractBattleModel(ABC):
@@ -85,7 +85,7 @@ class BattleModel(AbstractBattleModel):
         self.class_type = class_type
 
         self.ctx = temporary_common_storage.Context()
-        self.person = Person(lvl, stat, buffs, weapon_atk, ctx=self.ctx, class_type=class_type)
+        self.person = Person(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, ctx=self.ctx, class_type=class_type)
 
         self.trained_person = None
         self.trained_stat = None

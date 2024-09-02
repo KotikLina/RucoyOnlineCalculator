@@ -48,6 +48,12 @@ class AbstractPerson(ABC):
     real_stat: int
     weapon_atk: int
 
+    hp: int
+    mp: int
+
+    lvl_experience: int
+    experience_for_next_lvl: int
+
     class_type: str
 
     min_raw_damage: float
@@ -66,7 +72,7 @@ class AbstractPerson(ABC):
 
     ctx: Context
 
-    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int, ctx: Context, class_type: str = None) -> None:
+    def __init__(self, ctx: Context = None, lvl: int = 0, stat: int = 0, buffs: int = 0, weapon_atk: int = 0, class_type: str = None) -> None:
         self.lvl = lvl
         self.stat = stat
         self.buffs = buffs
