@@ -3,6 +3,7 @@ import disnake
 
 import TrainModel
 import PowerTrainModel
+import Offline
 import IndicatorsModel
 import temporary_common_storage
 
@@ -43,6 +44,32 @@ async def ptrain_slash_command(inter: disnake.ApplicationCommandInteraction,
     view = View(battle)
 
     await inter.response.send_message(embed=embed, view=view)
+
+
+@bot.slash_command(name="offline", description="Can only take **either** `stat2` or `hours`")
+async def offline_slash_command(inter: disnake.ApplicationCommandInteraction,
+                                current_stat: commands.Range[int, 1, 1000],
+                                target_stat: commands.Range[int, 1, 1000] = None,
+                                hours: commands.Range[int, 1, 1000] = None):
+
+    if (target_stat is not None and hours is not None) or (target_stat is None and hours is None):
+        await inter.response.send_message(
+            "Invalid input. Please provide **either** a `target_stat` or `hours` value, but not both or neither.",
+            ephemeral=True
+        )
+
+    elif target_stat is not None:
+        if current_stat < target_stat:
+            offline = Offline.OfflineModel(current_stat=current_stat, target_stat=target_stat)
+            embed = await offline.calculate_time_to_target_stat()
+            await inter.response.send_message(embed=embed)
+        else:
+            await inter.response.send_message("Target stat must be higher than the current stat.", ephemeral=True)
+
+    elif hours is not None:
+        offline = Offline.OfflineModel(current_stat=current_stat, hours=hours)
+        embed = await offline.calculate_new_stat_after_hours()
+        await inter.response.send_message(embed=embed)
 
 
 @bot.slash_command(name="lvl_info", description="Exp and skull")
