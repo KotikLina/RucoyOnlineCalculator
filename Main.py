@@ -13,7 +13,44 @@ command_sync_flags.sync_commands_debug = True
 bot = commands.InteractionBot(intents=disnake.Intents.all())
 
 
-CLASS_TYPE = ["melee", "distance", "magic"]
+@bot.slash_command(name="train", description="Online train")
+async def train_slash_command(inter: disnake.ApplicationCommandInteraction,
+                              lvl: commands.Range[int, 0, 1000],
+                              stat: commands.Range[int, 0, 1000],
+                              buffs: commands.Range[int, -100, 100] = 0,
+                              weapon_atk: commands.Range[int, 4, 100] = 5):
+    battle = TrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk)
+
+    embed = await battle.view(False)
+    view = View(battle)
+
+    await inter.response.send_message(embed=embed, view=view)
+
+
+@bot.slash_command(name="ptrain", description="Online power train")
+async def ptrain_slash_command(inter: disnake.ApplicationCommandInteraction,
+                               lvl: commands.Range[int, 0, 1000],
+                               stat: commands.Range[int, 0, 1000],
+                               class_type: str = commands.Param(
+                                   choices={"melee": "melee", "distance": "distance", "magic": "magic"}),
+                               buffs: commands.Range[int, -100, 100] = 0,
+                               weapon_atk: commands.Range[int, 4, 100] = 5,
+                               tick: commands.Range[int, 1, 5] = 4):
+    battle = PowerTrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, tick=tick,
+                                         class_type=class_type)
+
+    embed = await battle.view(False)
+    view = View(battle)
+
+    await inter.response.send_message(embed=embed, view=view)
+
+
+@bot.slash_command(name="lvl_info", description="Exp and skull")
+async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction,
+                                   lvl: commands.Range[int, 1, 1000]):
+    indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
+    embed = indicators.view()
+    await inter.response.send_message(embed=embed)
 
 
 class Button(disnake.ui.Button):
@@ -58,52 +95,6 @@ class View(disnake.ui.View):
 
         if battle.trained_person is not None:
             self.add_item(Button(battle))
-
-
-@bot.slash_command(name="train", description="Online train")
-async def train_slash_command(inter: disnake.ApplicationCommandInteraction,
-                              lvl: commands.Range[int, 0, 1000],
-                              stat: commands.Range[int, 0, 1000],
-                              buffs: commands.Range[int, -100, 100] = 0,
-                              weapon_atk: commands.Range[int, 4, 100] = 5):
-    battle = TrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk)
-
-    embed = await battle.view(False)
-    view = View(battle)
-
-    await inter.response.send_message(embed=embed, view=view)
-
-
-@bot.slash_command(name="ptrain", description="Online power train")
-async def ptrain_slash_command(inter: disnake.ApplicationCommandInteraction,
-                               lvl: commands.Range[int, 0, 1000],
-                               stat: commands.Range[int, 0, 1000],
-                               class_type: str,
-                               buffs: commands.Range[int, -100, 100] = 0,
-                               weapon_atk: commands.Range[int, 4, 100] = 5,
-                               tick: commands.Range[int, 1, 5] = 4):
-    battle = PowerTrainModel.BattleModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, tick=tick, class_type=class_type)
-
-    embed = await battle.view(False)
-    view = View(battle)
-
-    await inter.response.send_message(embed=embed, view=view)
-
-
-@ptrain_slash_command.autocomplete("class_type")
-async def class_type_autocomplete(inter: disnake.CommandInteraction, class_type: str):
-    string = class_type.lower()
-    return [lang for lang in CLASS_TYPE if string in lang.lower()]
-
-
-@bot.slash_command(name="lvl_info", description="Exp and skull")
-async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction,
-                                   lvl: commands.Range[int, 1, 1000]):
-    indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
-
-    embed = indicators.view()
-
-    await inter.response.send_message(embed=embed)
 
 
 if __name__ == "__main__":
