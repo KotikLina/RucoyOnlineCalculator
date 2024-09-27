@@ -4,7 +4,7 @@ from abc import ABC
 from typing import Final
 
 
-with open("Mobs_info.json", "r") as file:
+with open("mobs_info.json", "r") as file:
     data = json.load(file)
 
 mobs_info: list[dict] = data["mobs"]

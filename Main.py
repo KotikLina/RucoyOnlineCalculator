@@ -3,7 +3,7 @@ import disnake
 
 import TrainModel
 import PowerTrainModel
-import Offline
+import OfflineTrainModel
 import IndicatorsModel
 import temporary_common_storage
 
@@ -60,14 +60,14 @@ async def offline_slash_command(inter: disnake.ApplicationCommandInteraction,
 
     elif target_stat is not None:
         if current_stat < target_stat:
-            offline = Offline.OfflineModel(current_stat=current_stat, target_stat=target_stat)
+            offline = OfflineTrainModel.OfflineModel(current_stat=current_stat, target_stat=target_stat)
             embed = await offline.calculate_time_to_target_stat()
             await inter.response.send_message(embed=embed)
         else:
             await inter.response.send_message("Target stat must be higher than the current stat.", ephemeral=True)
 
     elif hours is not None:
-        offline = Offline.OfflineModel(current_stat=current_stat, hours=hours)
+        offline = OfflineTrainModel.OfflineModel(current_stat=current_stat, hours=hours)
         embed = await offline.calculate_new_stat_after_hours()
         await inter.response.send_message(embed=embed)
 
