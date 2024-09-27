@@ -30,6 +30,12 @@ for mob in mobs_info:
             high_hp_melee_mobs.append(mob)
 
 
+with open("mob_groups.json", "r") as file:
+    data = json.load(file)
+
+mobs_groups = data
+
+
 class Context:
     DEFAULT_MOB: Final[dict] = {"defense": 1000}
     mob: dict
