@@ -71,7 +71,7 @@ class AbstractBattleModel(ABC):
     ctx: temporary_common_storage.Context
 
     @abstractmethod
-    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int, tick: int) -> None:
+    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int, tick: int, class_type: str) -> None:
         ...
 
     @abstractmethod
@@ -80,7 +80,7 @@ class AbstractBattleModel(ABC):
 
 
 class BattleModel(AbstractBattleModel):
-    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int, tick: int, class_type) -> None:
+    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int, tick: int, class_type: str) -> None:
         self.tick = tick
         self.class_type = class_type
 
