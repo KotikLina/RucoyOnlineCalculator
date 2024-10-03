@@ -8,6 +8,7 @@ import DamageModel
 import OneshotModel
 import IndicatorsModel
 import temporary_common_storage
+import HelpModel
 
 
 command_sync_flags = commands.CommandSyncFlags.default()
@@ -108,6 +109,13 @@ async def oneshot_slash_command(inter: disnake.ApplicationCommandInteraction,
 async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction, lvl: commands.Range[int, 1, 1000]):
     indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
     embed = indicators.view()
+    await inter.response.send_message(embed=embed)
+
+
+@bot.slash_command(name="help", description="")
+async def help_slash_command(inter: disnake.ApplicationCommandInteraction):
+    help_model = HelpModel.HelpModel()
+    embed = help_model.view()
     await inter.response.send_message(embed=embed)
 
 
