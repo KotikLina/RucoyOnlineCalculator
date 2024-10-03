@@ -97,7 +97,7 @@ async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction,
 
 class TrainView(disnake.ui.View):
     def __init__(self, battle):
-        super().__init__()
+        super().__init__(timeout=None)
 
         if battle.end_game:
             self.add_item(self.EndGameDropdown(battle=battle))
@@ -139,7 +139,7 @@ class TrainView(disnake.ui.View):
 
 class MobView(disnake.ui.View):
     def __init__(self, battle):
-        super().__init__()
+        super().__init__(timeout=None)
         self.mob_groups_dropdown = self.MobGroupsDropdown(battle=battle)
         self.add_item(self.mob_groups_dropdown)
 

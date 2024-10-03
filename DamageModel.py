@@ -157,7 +157,9 @@ class BattleModel(AbstractDamageModel):
 
             return disnake.Embed(title=title, description="\n".join(description)).set_author(name=set_author)
 
-        description.append(f"**Mob: {self.ctx.mob['name']}** {self.ctx.mob['emoji']}")
+        mob_name_and_emoji = f"**{self.ctx.mob['name']}** {self.ctx.mob['emoji']}"
+
+        description.append(f"Mob: {mob_name_and_emoji}")
         description.append("")
 
         # простая атака
