@@ -5,6 +5,7 @@ import TrainModel
 import PowerTrainModel
 import OfflineTrainModel
 import DamageModel
+import OneshotModel
 import IndicatorsModel
 import temporary_common_storage
 
@@ -85,6 +86,21 @@ async def damage_slash_command(inter: disnake.ApplicationCommandInteraction,
     embed = await battle.view(False)
     view = MobView(battle)
 
+    await inter.response.send_message(embed=embed, view=view)
+
+
+@bot.slash_command(name="oneshot", description="oneshot calc")
+async def oneshot_slash_command(inter: disnake.ApplicationCommandInteraction,
+                                lvl: commands.Range[int, 1, 1000],
+                                stat: commands.Range[int, 1, 1000],
+                                buffs: commands.Range[int, -100, 100] = 0,
+                                weapon_atk: commands.Range[int, 4, 100] = 5,
+                                class_type: str = commands.Param(
+                                    choices={"melee": "melee", "distance": "distance", "magic": "magic"}),
+                                consistency: commands.Range[int, 1, 100] = 80):
+    battle = OneshotModel.OneshotModel(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, class_type=class_type, consistency_need=consistency)
+    embed = await battle.view(False)
+    view = MobView(battle)
     await inter.response.send_message(embed=embed, view=view)
 
 

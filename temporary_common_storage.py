@@ -76,6 +76,8 @@ class AbstractPerson(ABC):
 
     average_damage: int
 
+    consistency: int
+
     ctx: Context
 
     def __init__(self, ctx: Context = None, lvl: int = 0, stat: int = 0, buffs: int = 0, weapon_atk: int = 0, class_type: str = None) -> None:
