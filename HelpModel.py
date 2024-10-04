@@ -40,16 +40,6 @@ Calculates the amount of gold needed to skull for a certain base level.
 
 **/help**
 Displays the command list, but it looks like you already know how to use this!
-
-**/info**
-Shows more information about the bot.
-
-**/invite**
-Shows the invite link to add the bot to your server.
-*Make sure you give the bot ALL of the permissions requested.
-
-**/github**
-Displays the github link containing the source code for the bot!
 '''
 
         footer = "If you have suggestions or bugs to report, message me: kotiklinok#0000"
