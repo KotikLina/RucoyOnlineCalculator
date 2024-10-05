@@ -119,6 +119,12 @@ async def help_slash_command(inter: disnake.ApplicationCommandInteraction):
     await inter.response.send_message(embed=embed)
 
 
+@bot.slash_command(name="github", description="")
+async def github_slash_command(inter: disnake.ApplicationCommandInteraction):
+    embed = disnake.Embed(title="Kotiklina' Rucoy Calculator", description="https://github.com/KotikLina/RucoyOnlineCalculator").set_author(name="GitHub Link")
+    await inter.response.send_message(embed=embed)
+
+
 class TrainView(disnake.ui.View):
     def __init__(self, battle):
         super().__init__(timeout=None)
