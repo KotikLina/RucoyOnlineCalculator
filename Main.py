@@ -108,7 +108,7 @@ async def oneshot_slash_command(inter: disnake.ApplicationCommandInteraction,
 @bot.slash_command(name="lvl_info", description="Exp and skull")
 async def level_info_slash_command(inter: disnake.ApplicationCommandInteraction, lvl: commands.Range[int, 1, 1000]):
     indicators = IndicatorsModel.IndicatorsModel(lvl=lvl)
-    embed = indicators.view()
+    embed = await indicators.view()
     await inter.response.send_message(embed=embed)
 
 
@@ -121,7 +121,7 @@ async def help_slash_command(inter: disnake.ApplicationCommandInteraction):
 
 @bot.slash_command(name="github", description="")
 async def github_slash_command(inter: disnake.ApplicationCommandInteraction):
-    embed = disnake.Embed(title="Kotiklina' Rucoy Calculator", description="https://github.com/KotikLina/RucoyOnlineCalculator").set_author(name="GitHub Link")
+    embed = disnake.Embed(title="Kotiklina' Rucoy Calculator", description="https://github.com/KotikLina/RucoyOnlineCalculator").set_author(name="GitHub Link <:mini_slime:1194708281319510017>")
     await inter.response.send_message(embed=embed)
 
 

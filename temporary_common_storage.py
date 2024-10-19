@@ -54,12 +54,6 @@ class AbstractPerson(ABC):
     real_stat: int
     weapon_atk: int
 
-    hp: int
-    mp: int
-
-    lvl_experience: int
-    experience_for_next_lvl: int
-
     class_type: str
 
     min_raw_damage: float
