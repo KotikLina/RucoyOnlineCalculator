@@ -1,19 +1,14 @@
 import disnake
-from abc import ABC, abstractmethod
+import logging
 from typing import AsyncGenerator
 
-
-class AbstractIndicatorsModel(ABC):
-    @abstractmethod
-    def __init__(self, lvl: int) -> None:
-        ...
-
-    @abstractmethod
-    def view(self) -> disnake.Embed:
-        ...
+from project.computers.abc import AbstractIndicators
 
 
-class IndicatorsModel(AbstractIndicatorsModel):
+logger = logging.getLogger(__name__)
+
+
+class IndicatorsModel(AbstractIndicators):
     def __init__(self, lvl: int) -> None:
         self.lvl = lvl
 
@@ -58,4 +53,4 @@ class IndicatorsModel(AbstractIndicatorsModel):
             description.append(f"Gold that will be lost on death with {skull} skull: `{coins_lost_by_skull}` {money}")
 
         set_author = "Indicators"
-        return disnake.Embed(title=title, description="\n".join(description)).set_author(name=set_author)
+        return disnake.Embed(title=title, description="\n".join(description)).set_author(name=set_author).set_footer(text="If there is an inaccuracy - write kotiklinok#0000", icon_url="https://cdn.discordapp.com/emojis/1194708281319510017.webp")

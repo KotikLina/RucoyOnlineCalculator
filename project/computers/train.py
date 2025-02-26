@@ -1,90 +1,25 @@
 import disnake
+import logging
 import itertools
-from abc import ABC, abstractmethod
+
 from typing import Final, AsyncGenerator
 
-import temporary_common_storage
+
+from project.computers.abc import AbstractTrain
+from project.temporary_common_storage import Context, low_hp_mobs, mobs_info
+from project.structures import Person
+
+logger = logging.getLogger(__name__)
 
 
-class Person(temporary_common_storage.AbstractPerson):
-    @property
-    def real_stat(self) -> int:
-        return self.stat + self.buffs
-
-    # raw damage
-    @property
-    def min_raw_damage(self) -> float:
-        return (self.real_stat * self.weapon_atk) / 20 + self.lvl / 4
-
-    @property
-    def max_raw_damage(self) -> float:
-        return (self.real_stat * self.weapon_atk) / 10 + self.lvl / 4
-
-    @property
-    def max_raw_crit_damage(self) -> float:
-        return self.max_raw_damage * 1.05
-
-    # damage
-    @property
-    def min_damage(self) -> float:
-        return max(self.min_raw_damage - self.ctx.mob["defense"], 0)
-
-    @property
-    def max_damage(self) -> float:
-        return max(self.max_raw_damage - self.ctx.mob["defense"], 0)
-
-    @property
-    def max_crit_damage(self) -> float:
-        return max(self.max_raw_crit_damage - self.ctx.mob["defense"], 0)
-
-    # accuracy and average damage
-    @property
-    def normal_accuracy(self) -> float:
-        return max((self.max_damage / (self.max_raw_damage - self.min_raw_damage)), 0)
-
-    @property
-    def crit_accuracy(self) -> float:
-        return min(1.00, (self.max_crit_damage / (self.max_raw_crit_damage - self.max_raw_damage)))
-
-    @property
-    def accuracy(self) -> float:
-        return (self.normal_accuracy * 0.99) + (self.crit_accuracy * 0.01)
-
-    @property
-    def average_damage(self) -> float:
-        return self.accuracy * (0.99 * ((self.max_damage + self.min_damage) / 2)) + 0.01 * ((self.max_crit_damage + self.max_damage) / 2)
-
-    # copy
-    def copy(self, ctx):
-        return Person(lvl=self.lvl, stat=self.stat, buffs=self.buffs, weapon_atk=self.weapon_atk, ctx=ctx)
-
-
-class AbstractBattleModel(ABC):
-    frontier_group: dict | None
-    trained_person: Person | None
-    trained_stat: int | None
-
-    tickrate: int
-    time: int
-
-    ctx: temporary_common_storage.Context
-
-    @abstractmethod
-    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int) -> None:
-        ...
-
-    @abstractmethod
-    def view(self, button) -> disnake.Embed:
-        ...
-
-
-class BattleModel(AbstractBattleModel):
+class BattleModel(AbstractTrain):
     REQUIRED_ACCURACY: Final[float] = 0.1749
     TRAIN_TICKRATE: Final[int] = 3600
 
-    def __init__(self, lvl: int, stat: int, buffs: int, weapon_atk: int) -> None:
-        self.ctx = temporary_common_storage.Context()
-        self.person = Person(lvl=lvl, stat=stat, buffs=buffs, weapon_atk=weapon_atk, ctx=self.ctx)
+    def __init__(self,
+                 person: Person) -> None:
+
+        self.person = person
 
         self.trained_person = None
         self.trained_stat = None
@@ -97,19 +32,19 @@ class BattleModel(AbstractBattleModel):
 
     @property
     def time(self) -> float:
-        return self.ctx.mob['health'] / self.person.average_damage
+        return self.person.ctx.mob['health'] / self.person.average_damage
 
     # Основной процесс
     async def process_mobs(self) -> AsyncGenerator[dict, None]:
         self.frontier_group = None
 
         key = lambda x: (x["defense"])
-        iterator = itertools.groupby(sorted(temporary_common_storage.low_hp_mobs, key=key, reverse=True), key=key)
+        iterator = itertools.groupby(sorted(low_hp_mobs, key=key, reverse=True), key=key)
 
         prev = None
         for _, group in iterator:
             group = tuple(group)
-            self.ctx.mob = group[0]
+            self.person.ctx.mob = group[0]
             if self.person.accuracy < self.REQUIRED_ACCURACY:
                 prev = group
             else:
@@ -133,7 +68,7 @@ class BattleModel(AbstractBattleModel):
             self.trained_stat = 0
             return
 
-        ctx = temporary_common_storage.Context()
+        ctx = Context()
         ctx.mob = self.frontier_group[0]
         self.trained_person = self.person.copy(ctx)
         self.trained_stat = 0
@@ -150,7 +85,7 @@ class BattleModel(AbstractBattleModel):
             return
 
         key = lambda x: (x["defense"])
-        iterator = itertools.groupby(sorted(temporary_common_storage.mobs_info, key=key, reverse=True), key=key)
+        iterator = itertools.groupby(sorted(mobs_info, key=key, reverse=True), key=key)
 
         for defense, group in iterator:
             group = tuple(group)
@@ -158,10 +93,10 @@ class BattleModel(AbstractBattleModel):
             if defense != int(button):
                 continue
 
-            self.ctx.mob = group[0]
+            self.person.ctx.mob = group[0]
             if self.person.max_damage != 0:
                 for mob in group:
-                    self.ctx.mob = mob
+                    self.person.ctx.mob = mob
                     yield mob
 
     async def view(self, button: int | bool) -> disnake.Embed:
@@ -191,7 +126,7 @@ class BattleModel(AbstractBattleModel):
             description.append(f"Training is impossible. Please contact @kotiklinok with this error")
 
         # button
-        self.ctx.mob = self.ctx.DEFAULT_MOB
+        self.person.ctx.mob = self.person.ctx.DEFAULT_MOB
         async for mob in self.process_button(button):
             names_mob_button.append(f"{mob['name']} {mob['emoji']}")
 
@@ -222,8 +157,10 @@ class BattleModel(AbstractBattleModel):
                 description.append(f"You need **{self.trained_stat}** stats to train effectively on " + ", ".join(names_next_mob))
 
         set_author = "Training Calculation"
+
         title = f"Lvl: **{self.person.lvl}** {mini_slime_emoji} " \
                 f"Stat: **{self.person.stat}** {mini_slime_emoji} " \
                 f"Buffs: **{self.person.buffs}** {mini_slime_emoji}" \
                 f"Weapon: **{self.person.weapon_atk} Atk **"
-        return disnake.Embed(title=title, description="\n".join(description)).set_author(name=set_author)
+
+        return disnake.Embed(title=title, description="\n".join(description)).set_author(name=set_author).set_footer(text="If there is an inaccuracy - write kotiklinok#0000", icon_url="https://cdn.discordapp.com/emojis/1194708281319510017.webp")

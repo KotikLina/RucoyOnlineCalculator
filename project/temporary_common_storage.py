@@ -1,10 +1,8 @@
 import json
-
-from abc import ABC
 from typing import Final
 
 
-with open("mobs_info.json", "r") as file:
+with open("static/data/mobs_info.json", "r") as file:
     data = json.load(file)
 
 mobs_info: list[dict] = data["mobs"]
@@ -30,7 +28,7 @@ for mob in mobs_info:
             high_hp_melee_mobs.append(mob)
 
 
-with open("mob_groups.json", "r") as file:
+with open("static/data/mob_groups.json", "r") as file:
     data = json.load(file)
 
 mobs_groups = data
@@ -45,40 +43,3 @@ class Context:
             self.mob = self.DEFAULT_MOB
         else:
             self.mob = mob
-
-
-class AbstractPerson(ABC):
-    lvl: int
-    stat: int
-    buffs: int
-    real_stat: int
-    weapon_atk: int
-
-    class_type: str
-
-    min_raw_damage: float
-    max_raw_damage: float
-    max_raw_crit_damage: float
-
-    min_damage: float
-    max_damage: float
-    max_crit_damage: float
-
-    normal_accuracy: int
-    crit_accuracy: int
-    accuracy: float
-
-    average_damage: int
-
-    consistency: int
-
-    ctx: Context
-
-    def __init__(self, ctx: Context = None, lvl: int = 0, stat: int = 0, buffs: int = 0, weapon_atk: int = 0, class_type: str = None) -> None:
-        self.lvl = lvl
-        self.stat = stat
-        self.buffs = buffs
-        self.weapon_atk = weapon_atk
-        self.class_type = class_type
-
-        self.ctx = ctx
