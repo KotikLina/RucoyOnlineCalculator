@@ -4,14 +4,16 @@ from project import temporary_common_storage
 
 
 class MobView(disnake.ui.View):
-    def __init__(self, battle):
+    def __init__(self, battle, command_sender: disnake.Member):
         super().__init__(timeout=None)
-        self.mob_groups_dropdown = MobGroupsDropdown(battle=battle)
+        self.mob_groups_dropdown = MobGroupsDropdown(battle=battle, command_sender=command_sender)
         self.add_item(self.mob_groups_dropdown)
 
 
 class MobGroupsDropdown(disnake.ui.StringSelect):
-    def __init__(self, battle):
+    def __init__(self, battle, command_sender: disnake.Member):
+        self.command_sender = command_sender
+
         self.battle = battle
         options = []
 
@@ -26,11 +28,11 @@ class MobGroupsDropdown(disnake.ui.StringSelect):
         )
 
     async def callback(self, inter: disnake.MessageInteraction):
-        if inter.author == inter.message.author:
+        if inter.author == self.command_sender:
             selected_group = self.values[0]
             mobs_in_group = temporary_common_storage.mobs_groups[selected_group]
 
-            mobs_dropdown = MobsInGroupsDropdown(battle=self.battle, mobs=mobs_in_group)
+            mobs_dropdown = MobsInGroupsDropdown(battle=self.battle, mobs=mobs_in_group, command_sender=self.command_sender)
 
             for item in self.view.children:
                 if isinstance(item, MobsInGroupsDropdown):
@@ -44,7 +46,9 @@ class MobGroupsDropdown(disnake.ui.StringSelect):
 
 
 class MobsInGroupsDropdown(disnake.ui.StringSelect):
-    def __init__(self, battle, mobs):
+    def __init__(self, battle, mobs, command_sender: disnake.Member):
+        self.command_sender = command_sender
+
         self.battle = battle
         options = [
             disnake.SelectOption(label=mob["name"], emoji=mob["emoji"], value=mob['name'])
@@ -59,7 +63,7 @@ class MobsInGroupsDropdown(disnake.ui.StringSelect):
         )
 
     async def callback(self, inter: disnake.MessageInteraction):
-        if inter.author == inter.message.author:
+        if inter.author == self.command_sender:
             embed = await self.battle.view(dropdown_option=self.values[0])
             await inter.response.edit_message(embed=embed)
         else:
@@ -67,17 +71,19 @@ class MobsInGroupsDropdown(disnake.ui.StringSelect):
 
 
 class TrainView(disnake.ui.View):
-    def __init__(self, battle):
+    def __init__(self, battle, command_sender: disnake.Member):
         super().__init__(timeout=None)
         if battle.end_game:
-            self.add_item(EndGameDropdown(battle=battle))
+            self.add_item(EndGameDropdown(battle=battle, command_sender=command_sender))
 
         if battle.trained_person is not None:
-            self.add_item(MoreButton(battle=battle))
+            self.add_item(MoreButton(battle=battle, command_sender=command_sender))
 
 
 class EndGameDropdown(disnake.ui.StringSelect):
-    def __init__(self, battle):
+    def __init__(self, battle, command_sender: disnake.Member):
+        self.command_sender = command_sender
+
         self.battle = battle
         options = []
 
@@ -95,7 +101,7 @@ class EndGameDropdown(disnake.ui.StringSelect):
             )
 
     async def callback(self, inter: disnake.MessageInteraction):
-        if inter.author == inter.message.author:
+        if inter.author == self.command_sender:
             embed = await self.battle.view(button=self.values[0])
             await inter.response.edit_message(embed=embed)
         else:
@@ -103,12 +109,14 @@ class EndGameDropdown(disnake.ui.StringSelect):
 
 
 class MoreButton(disnake.ui.Button):
-    def __init__(self, battle):
+    def __init__(self, battle, command_sender: disnake.Member):
+        self.command_sender = command_sender
+
         self.battle = battle
         super().__init__(label="More", style=disnake.ButtonStyle.green)
 
     async def callback(self, inter: disnake.MessageInteraction):
-        if inter.author == inter.message.author:
+        if inter.author == self.command_sender:
             embed = await self.battle.view(self.battle.frontier_group[0]["defense"])
             await inter.response.edit_message(embed=embed)
         else:

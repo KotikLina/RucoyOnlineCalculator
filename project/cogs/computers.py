@@ -28,7 +28,7 @@ async def train_slash_command(inter: ApplicationCommandInteraction,
                     weapon_atk=weapon_atk)
     battle = train.BattleModel(person=person)
     embed = await battle.view(False)
-    view = views.TrainView(battle)
+    view = views.TrainView(battle=battle, command_sender=inter.author)
 
     await inter.response.send_message(embed=embed, view=view)
 
@@ -52,7 +52,7 @@ async def ptrain_slash_command(inter: ApplicationCommandInteraction,
     battle = power_train.BattleModel(person=person,
                                      tick=tick)
     embed = await battle.view(False)
-    view = views.TrainView(battle)
+    view = views.TrainView(battle=battle, command_sender=inter.author)
 
     await inter.response.send_message(embed=embed, view=view)
 
@@ -98,7 +98,7 @@ async def damage_slash_command(inter: ApplicationCommandInteraction,
                     class_type=class_type)
     battle = damage.BattleModel(person=person)
     embed = await battle.view(False)
-    view = views.MobView(battle)
+    view = views.MobView(battle=battle, command_sender=inter.author)
 
     await inter.response.send_message(embed=embed, view=view)
 
@@ -122,7 +122,7 @@ async def oneshot_slash_command(inter: ApplicationCommandInteraction,
     battle = oneshot.OneshotModel(person=person,
                                   consistency_need=consistency)
     embed = await battle.view(False)
-    view = views.MobView(battle)
+    view = views.MobView(battle=battle, command_sender=inter.author)
 
     await inter.response.send_message(embed=embed, view=view)
 
