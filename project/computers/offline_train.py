@@ -1,5 +1,6 @@
 import disnake
 import logging
+from typing import Optional
 
 from project.computers.abc import AbstractOffline
 
@@ -9,9 +10,9 @@ logger = logging.getLogger(__name__)
 
 class OfflineModel(AbstractOffline):
     def __init__(self,
-                 current_stat: int,
-                 target_stat: int = 0,
-                 hours: int = 0) -> None:
+                 current_stat: Optional[int],
+                 target_stat: Optional[int] = None,
+                 hours: Optional[int] = None) -> None:
         self.current_stat = current_stat
         self.target_stat = target_stat
         self.hours = hours
